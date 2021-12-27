@@ -1,0 +1,125 @@
+redeemed_rewards = 0
+redeemed_drinks = 0
+redeemed_chips = 0
+redeemed_gc = 0
+redeemed_value = 0
+
+def freeDrink(aDictionary, aCustomerIDKey):
+    #look up how many free drinks
+    free_drink = aDictionary[aCustomerIDKey][1]
+    #if qul for free drink sub num of drinks from the point cost
+    freed = free_drink // 5
+    if freed >= 1:
+            #return the remainder under the variable free_drink
+        
+        return free_drink - 5 
+    else:
+        return -1
+            #repeat for other dictionaries
+def freeChips(aDictionary, aCustomerIDKey):
+    free_chip = aDictionary[aCustomerIDKey][2]
+    freec = free_chip // 7
+    if freec >= 1:
+        return free_chip - 7
+    else:
+        return -1
+def giftCard(aDictionary, aCustomerIDKey):
+    gift_card = aDictionary[aCustomerIDKey][3]
+    gift = gift_card // 5000
+    if gift >= 1:
+        return gift_card - 5000
+    else:
+        return -1
+def printCertificate(aName, aMessageString):
+    print('+{:^41}+'.format('-' * 41))
+    print('|{:^41}|'.format(''))
+    print('|{:^41}|'.format(aName))
+    print('|{:^41}|'.format(''))
+    print('|{:^41}|'.format(aMessageString))
+    print('|{:^41}|'.format(''))
+    print('+{:^41}+'.format('-' * 41))
+    
+def IDCheck(aDictionary, aCustomerIDKey):
+    if aCustomerIDKey in aDictionary:
+        return True
+    else:
+        return False
+        
+    
+
+if __name__ == '__main__':
+    rewardsDictionary = {
+            2569: ['Charles Babbage', 8, 12, 218378], 
+            1580: ['Ada Lovelace', 5, 2, 96207], 
+            2241: ['Katherine Johnson', 1, 8, 47133], 
+            7830: ['George Boole', 22, 25, 8875], 
+            5411: ['Grace Hopper', 15, 7, 35002], 
+            2298: ['Herman Hollerith', 0, 0, 162238], 
+            8324: ['Kathleen Booth', 12, 14, 44133], 
+            3309: ['Tim Berners-Lee', 2, 3, 280], 
+            5678: ['Anita Borg', 3, 15, 52758], 
+            2099: ['John Backus', 6, 35, 42031], 
+            7166: ['Donald Knuth', 18, 10, 5600]
+            }
+    
+    user_input = int(input('Enter a valid ID number, or -1 to quit for the day:\n'))
+    while user_input != -1:
+        if IDCheck(rewardsDictionary,user_input):
+            list_id = rewardsDictionary[user_input]
+            current_user = rewardsDictionary[user_input][0]
+            format_string = '{name:<20}{bishop:>8}'
+            print('Welcome, {}!'.format(current_user))
+            print('Here are your earned purchases so far:')
+            print(format_string.format(name='   Number of Drinks:', bishop=rewardsDictionary[user_input][1]))
+            print(format_string.format(name='   Number of Chips:', bishop=rewardsDictionary[user_input][2]))
+            print(format_string.format(name='   Number of Points:', bishop=rewardsDictionary[user_input][3]))
+            print('')
+            print('Enter a number to Choose a reward: ')
+            print('')
+            print('(1) for a Free Drink')
+            print('(2) for a Free Bag of Chips')
+            print ('(3) for a $25 gift card')
+            print('(4) None - I just wanted to check my points')
+            print('')
+            customer_reward = int(input())
+            if customer_reward == 1:
+                drink_rewarded = freeDrink(rewardsDictionary,user_input)
+                if drink_rewarded >= 0:
+                    printCertificate(current_user, 'is entitled to a free drink!')
+                    # set dictionary drinks to the drink reward 
+                    rewardsDictionary[user_input][1] = drink_rewarded
+                    redeemed_drinks += 1
+                    redeemed_rewards += 1
+                    redeemed_value += 1.39
+                else:
+                    print("Sorry, you don't have enough drink purchases for a free drink")
+            if customer_reward == 2:
+                chip_rewarded = freeChips(rewardsDictionary,user_input)
+                if chip_rewarded >= 0:
+                    printCertificate(current_user,'is entitled to a free bag of chips!')
+                    rewardsDictionary[user_input][2] = chip_rewarded
+                    redeemed_chips += 1
+                    redeemed_rewards += 1
+                    redeemed_value += 1.79
+                else:
+                    print("Sorry, you don't have enough chips purchases for a free bag of chips")
+            if customer_reward == 3:
+                gift_rewarded = giftCard(rewardsDictionary,user_input)
+                if gift_rewarded >= 0:
+                    printCertificate(current_user,'is entitled to a $25 gift card!')
+                    rewardsDictionary[user_input][3] = gift_rewarded
+                    redeemed_gc += 1
+                    redeemed_rewards += 1 
+                    redeemed_value += 25
+                else:
+                    print("Sorry, you don't have enough points for a gift card")
+        else:
+            print('Error: Customer ID', user_input, 'is not valid')
+        user_input = int(input('Enter a valid ID number, or -1 to quit for the day:\n'))
+print('')
+print("Fill'erUpSparty redeemed",redeemed_rewards, "total rewards worth ${:.2f} this run:".format(redeemed_value))
+
+
+print("    ",redeemed_drinks,"free drinks,",end=' ')
+print(redeemed_chips,"free bags of chips,",end=' ')
+print('and', redeemed_gc,"free gift cards.")
